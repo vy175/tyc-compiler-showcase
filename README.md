@@ -51,7 +51,34 @@ To ensure the reliability of the frontend, I developed a comprehensive testing s
 * **Coverage:** **200+ Automated Unit Tests** rigorously verifying the Lexical Analyzer and AST Generation modules.
 * **Edge Case Handling:** Verified "Maximal Munch" logic (e.g., `+++` as `++` and `+`), scientific notation (e.g., `.14E-5`), and complex string escape sequences.
 * **Error Detection:** Tested custom error messages for unclosed strings and illegal characters to ensure a professional developer experience.
+### Test Case Example
 
+```python
+#LEXER
+def test_expression_maximal_munch_plus():
+    """Ensures '+++' is correctly tokenized as '++' and '+' (Maximal Munch)"""
+    tokenizer = Tokenizer("+++")
+    assert tokenizer.get_tokens_as_string() == "++,+,<EOF>"
+
+def test_literal_float_scientific_standard():
+    """Verifies standard scientific notation handling"""
+    tokenizer = Tokenizer("8.05e85")
+    assert tokenizer.get_tokens_as_string() == "8.05e85,<EOF>"
+#PARSER
+def test_switch_double_default():
+    """Error: Enforces that only one 'default' label is allowed"""
+    source = "void main() { switch(x) { default: break; default: break; } }"
+    assert Parser(source).parse() == "Error on line 1 col 42: default"
+#AST
+def test_nested_struct_ast():
+    """Verifies AST structure for nested struct declarations"""
+    source = """
+    struct Pixel { int red; int green; };
+    struct Frame { Pixel p1; };
+    """
+    expected = "Program([StructDecl(Pixel, [MemberDecl(IntType(), red), MemberDecl(IntType(), green)]), StructDecl(Frame, [MemberDecl(StructType(Pixel), p1)])])"
+    assert str(ASTGenerator(source).generate()) == expected
+```
 ---
 
 ## 🖼 Proof of Work
