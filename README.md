@@ -82,7 +82,6 @@ def test_nested_struct_ast():
 ---
 
 ## 🖼 Proof of Work
-![ANTLR4 File](image.png)
 ![AST generation file](image-1.png)
 
 
